@@ -1,43 +1,65 @@
-import { Fragment} from "react";
+import { Fragment, useEffect} from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logo } from "../../assets/assets";
 import { Link, useLocation } from "react-router-dom";
 import { RootState } from "../../redux/store"; 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { GetUser } from "../../redux/auth/auth.reducer";
 
 
 export default function Navbar() {
   const { data }: any = useSelector((state: RootState) => state.auth);
 
-const user = {
-  name: data && data?.username,
-  email: data && data?.email,
-};
+  // check if user is logged in
 
-// navigation
-const path = useLocation().pathname;
-const navigation = [
-  { name: "HOME", href: "/", current: path == "/" ? true : false },
-  { name: "VIP", href: "/vip", current: path == "/vip" ? true : false },
-  { name: "ABOUT", href: "/about", current: path == "/about" ? true : false },
-  {
-    name: "CONTACT",
-    href: "/contact",
-    current: path == "/contact" ? true : false,
-  },
-];  
-const userNavigation: { name: string; href: string }[] = [];
-if (data && data?.isAdmin) {
-  userNavigation.push({ name: "Admin dashboard", href: "/admin" });
-}
-userNavigation.push({ name: "Sign out", href: "/signin" });
+  //user
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
+        if (token) {
+          await dispatch(GetUser(token));
+        }
+      } catch (e) {
+        console.log(e);
+        throw new Error("error creating session");
+      }
+    };
 
+    fetchData();
+  }, []);
+
+  const user = {
+    name: data && data?.username,
+    email: data && data?.email,
+  };
+
+  // navigation
+  const path = useLocation().pathname;
+  const navigation = [
+    { name: "HOME", href: "/", current: path == "/" ? true : false },
+    { name: "VIP", href: "/vip", current: path == "/vip" ? true : false },
+    { name: "ABOUT", href: "/about", current: path == "/about" ? true : false },
+    {
+      name: "CONTACT",
+      href: "/contact",
+      current: path == "/contact" ? true : false,
+    },
+  ];
+  const userNavigation: { name: string; href: string }[] = [];
+  if (data && data?.isAdmin) {
+    userNavigation.push({ name: "Admin dashboard", href: "/admin" });
+  }
+  userNavigation.push({ name: "Sign out", href: "/signin" });
+
+  function classNames(...classes: any) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   return (
     <Disclosure as="nav" className="bg-slate-100 p-1 font-rubik">
@@ -121,7 +143,7 @@ function classNames(...classes: any) {
                                   <a
                                     href={item.href}
                                     className={classNames(
-                                      active ? "bg-red-300" : "",
+                                      active ? "bg-gray-300" : "",
                                       "block px-4 py-2 text-sm text-gray-900/70"
                                     )}
                                   >

@@ -35,7 +35,7 @@ const AdminPage: React.FC = () => {
   }, [dispatch, success]);
 
   const navigate = useNavigate();
-  user.admin == false ? navigate("/") : null; // block non admin users from here
+  (user.admin == false || !user._id) ? navigate("/") : null; // block non admin users from here
 
 
   const vip_users =

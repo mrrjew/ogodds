@@ -5,14 +5,12 @@ const url = "https://ogsoo-engine.onrender.com"
 
 export const LatestSlip:any = createAsyncThunk("latest/slip",async(token:any,thunkAPI) => {
     try{
-        const _token = token?.replace(/^"(.*)"$/, "$1")
         const res = await axios(
         {
             method:"get",
             url:`${url}/slip/latest`,
             headers:{
                 "Content-Type":"application/json",
-                Authorization: `Bearer ${_token}`
             }
         }
     )
@@ -27,14 +25,12 @@ export const LatestSlip:any = createAsyncThunk("latest/slip",async(token:any,thu
 
 export const GetAllGroupedSlips:any = createAsyncThunk("grouped/slips", async (token:any,thunkAPI) => {
     try{
-        const _token = token?.replace(/^"(.*)"$/, "$1")
         const res = await axios(
         {
             method:"get",
             url:`${url}/slip/allgrouped`,
             headers:{
                 "Content-Type":"application/json",
-                Authorization: `Bearer ${_token}`
             }
         }
     )

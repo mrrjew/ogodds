@@ -9,11 +9,12 @@ import { RootState } from "../redux/store";
 import { useEffect } from "react";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { GetAllGroupedSlips } from "../redux/slip/slip.reducer";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 export default function Vip() {
+
   const toastOptions: any = {
     position: "top-right",
     autoClose: 3000,
@@ -43,10 +44,10 @@ export default function Vip() {
 
   useEffect(() => {
     if (error) {
-      toast.error("Error sending sms.", toastOptions);
+      toast.error("Error verifying user.", toastOptions);
       console.log(error)
     } else if (success) {
-      toast.success("Message successfully", toastOptions);
+      toast.success("Vip verification successfully", toastOptions);
     }
   }, [error, success]);
   return (
@@ -143,7 +144,7 @@ export default function Vip() {
                                 1XBet
                               </p>
                               <p className="bg-white rounded-md p-1 px-2 font-bold border-[1px] border-slate-300">
-                                {vipSlip.bookingcodes?.onexbet}
+                                {vipSlip.booking_codes?.onexbet}
                               </p>
                             </div>
                           </div>
@@ -181,19 +182,7 @@ export default function Vip() {
           </>
         </div>
       </div>
-      {/* react toastify */}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+    
     </div>
   );
 }

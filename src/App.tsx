@@ -13,9 +13,9 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Footer from "./components/utils/Footer";
 import { useDispatch } from "react-redux";
-import { GetUser } from "./redux/auth/auth.reducer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-
+import { GetUser } from "./redux/auth/auth.reducer";
+import {ToastContainer} from "react-toastify"
 
 const App: React.FC = () => {
   // check if user is logged in
@@ -29,7 +29,8 @@ const App: React.FC = () => {
         const token = localStorage.getItem("token");
 
         if (token) {
-          dispatch(GetUser(token));
+          console.log("user");
+          await dispatch(GetUser(token));
         }
       } catch (e) {
         console.log(e);
@@ -55,6 +56,19 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
+              {/* react toastify */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />v
     </React.StrictMode>
   );
 };

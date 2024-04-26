@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../assets/logo.png";
 import { useEffect, useState } from "react";
-import { CreateSession, RegisterUser } from "../../redux/auth/auth.reducer";
+import { CreateSession, GetUser, RegisterUser } from "../../redux/auth/auth.reducer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { reset } from "../../redux/auth/auth.slice";
 import { RootState } from "../../redux/store";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
@@ -51,6 +51,11 @@ useEffect(() => {
    if (error) {
      toast.error("Error signing up.", toastOptions);
    } else if (success) {
+    async function SignInLogic() {
+      await dispatch(CreateSession(data.user));
+      await dispatch(GetUser(localStorage.getItem("token")));
+    }
+    SignInLogic();
      toast.success("Signed up successfully", toastOptions);
      !error && navigate("/"); // navigate to home page
    }
@@ -65,10 +70,6 @@ const submitData = async (e: React.FormEvent<HTMLFormElement>) => {
     password: "",
   });
 };
-
-// create session
-console.log(data?.user);
-success && dispatch(CreateSession(data.user));
 
 
   return (
@@ -99,7 +100,7 @@ success && dispatch(CreateSession(data.user));
                   required
                   value={formData.username}
                   onChange={handleOnchange}
-                  className="p-1 px-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-slate-50 p-1 px-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Username"
                 />
               </div>
@@ -115,7 +116,7 @@ success && dispatch(CreateSession(data.user));
                   required
                   value={formData.email}
                   onChange={handleOnchange}
-                  className="p-1 px-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-slate-50 p-1 px-2 relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
                 />
               </div>
@@ -131,7 +132,7 @@ success && dispatch(CreateSession(data.user));
                   required
                   value={formData.password}
                   onChange={handleOnchange}
-                  className="p-1 px-2 relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-slate-50 p-1 px-2 relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Password"
                 />
               </div>
@@ -157,7 +158,9 @@ success && dispatch(CreateSession(data.user));
             <div>
               <button
                 type="submit"
-                className={`flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 animate ${loading ? "animate-pulse" : ""}`}
+                className={`flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 animate ${
+                  loading ? "animate-pulse" : ""
+                }`}
               >
                 {loading ? "Please wait..." : "Sign up"}
               </button>
@@ -175,19 +178,7 @@ success && dispatch(CreateSession(data.user));
           </p>
         </div>
 
-        {/* react toastify */}
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+     
       </div>
     </>
   );

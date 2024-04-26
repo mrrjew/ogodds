@@ -49,7 +49,7 @@ const AdminCreate = () => {
   currentSlip = slip_token && JSON.parse(slip_token);
 
   const navigate = useNavigate();
-  user.admin == false ? navigate("/") : null; // block non admin users from here
+  user.admin == false || !user._id ? navigate("/") : null; // block non admin users from here
 
   const [formData, setFormData] = useState({
     slip_title: currentSlip?.slip_title,
@@ -92,29 +92,29 @@ const AdminCreate = () => {
   };
 
   // handle odds
-  const [odds,setOdds] = useState([
+  const [odds, setOdds] = useState([
     {
-      league:"",
-      teams:"",
-      tips:"",
-      result:""
-    }
-  ])
-const handleOddschange = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  index: number
-) => {
-  const { name, value } = e.target;
-  setOdds((prevOdds) => {
-    return prevOdds.map((odd, i) => {
-      if (i === index) {
-        return { ...odd, [name]: value };
-      }
-      return odd;
+      league: "",
+      teams: "",
+      tips: "",
+      result: "",
+    },
+  ]);
+  const handleOddschange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const { name, value } = e.target;
+    setOdds((prevOdds) => {
+      return prevOdds.map((odd, i) => {
+        if (i === index) {
+          return { ...odd, [name]: value };
+        }
+        return odd;
+      });
     });
-  });
-  console.log(odds)
-};
+    console.log(odds);
+  };
 
   // adds a new record field
   const [records, setRecords] = useState<JSX.Element[]>([]);

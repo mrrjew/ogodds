@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { reset } from "../../redux/auth/auth.slice";
-import { toast, ToastContainer } from "react-toastify";
-import { CreateSession, LoginUser } from "../../redux/auth/auth.reducer";
+import { toast } from "react-toastify";
+import { CreateSession, GetUser, LoginUser } from "../../redux/auth/auth.reducer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -52,6 +52,13 @@ const navigate = useNavigate();
       toast.error("Error signing in.", toastOptions);
     } else if (success) {
       toast.success("Signed in successfully", toastOptions);
+
+
+      async function SignInLogic(){
+        await dispatch(CreateSession(data.user))
+        await dispatch(GetUser(localStorage.getItem("token")))
+      }
+      SignInLogic()
       !error && navigate("/"); // navigate to home page
     }
   }, [error, loading, success, navigate]);
@@ -67,8 +74,6 @@ const navigate = useNavigate();
     
   };
   
-  success && dispatch(CreateSession(data));
-
   return (
     <>
       <div className="flex min-h-full flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -97,7 +102,7 @@ const navigate = useNavigate();
                   autoComplete="email"
                   required
                   onChange={handleOnchange}
-                  className="relative block w-full rounded-t-md border-0 p-1 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-slate-50 relative block w-full rounded-t-md border-0 p-1 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
                 />
               </div>
@@ -112,7 +117,7 @@ const navigate = useNavigate();
                   autoComplete="current-password"
                   required
                   onChange={handleOnchange}
-                  className="relative block w-full rounded-b-md border-0 p-1 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="bg-slate-50 relative block w-full rounded-b-md border-0 p-1 px-2 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-100 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Password"
                 />
               </div>
@@ -136,7 +141,7 @@ const navigate = useNavigate();
 
               <div className="text-sm leading-6">
                 <a
-                  href="/forgotpassword"
+                  href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
@@ -166,19 +171,7 @@ const navigate = useNavigate();
             </a>
           </p>
         </div>
-        {/* react toastify */}
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+
       </div>
     </>
   );

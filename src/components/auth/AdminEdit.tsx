@@ -31,76 +31,68 @@ const AdminEdit = () => {
 
   const { data: user }: any = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
-  const { allSlips}: any = useSelector(
-    (state: RootState) => state.slips
-  );
+  const { allSlips }: any = useSelector((state: RootState) => state.slips);
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     dispatch(GetAllSlips(token));
   }, []);
-  
+
   // getting the slip that we want to edit and saving it in localstorage
- let currentSlip:any,slip_token:any
+  let currentSlip: any, slip_token: any;
 
-let _currentSlip = allSlips.filter(
-   (slip: any) => slip._id == query
- )[0];
+  let _currentSlip = allSlips.filter((slip: any) => slip._id == query)[0];
 
-   _currentSlip &&
-     localStorage.setItem("currentSlip", JSON.stringify(_currentSlip));
-   slip_token = _currentSlip && localStorage.getItem("currentSlip");
-   currentSlip = slip_token && JSON.parse(slip_token);
-  
+  _currentSlip &&
+    localStorage.setItem("currentSlip", JSON.stringify(_currentSlip));
+  slip_token = _currentSlip && localStorage.getItem("currentSlip");
+  currentSlip = slip_token && JSON.parse(slip_token);
+
   const navigate = useNavigate();
-  user.admin == false ? navigate("/") : null; // block non admin users from here
+  user.admin == false || !user._id ? navigate("/") : null; // block non admin users from here
 
-   const [formData, setFormData] = useState({
-     slip_title: currentSlip?.slip_title,
-     booking_codes: {
-       sporty_bet:currentSlip?.booking_codes?.sporty_bet,
-       onexbet: currentSlip?.booking_codes?.onexbet
-     },
-     type: currentSlip?.type,
-     status: currentSlip?.status,
-   });
+  const [formData, setFormData] = useState({
+    slip_title: currentSlip?.slip_title,
+    booking_codes: {
+      sporty_bet: currentSlip?.booking_codes?.sporty_bet,
+      onexbet: currentSlip?.booking_codes?.onexbet,
+    },
+    type: currentSlip?.type,
+    status: currentSlip?.status,
+  });
 
-
-
-const handleOnchange = (e:any) => {
-  const { name, value, type } = e.target;
-  if (type === "radio") {
-    // For radio inputs, update the formData directly
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  } else if (
-    name === "booking_codes.sporty_bet" ||
-    name === "booking_codes.onexbet"
-  ) {
-    // If it's a booking code, don't update the formData directly
-    setFormData((prev) => ({
-      ...prev,
-      booking_codes: {
-        ...prev.booking_codes,
-        [name.split(".").pop()]: value,
-      },
-    }));
-  } else {
-    // For other fields, update the formData directly
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
-  console.log(formData)
-};
-
+  const handleOnchange = (e: any) => {
+    const { name, value, type } = e.target;
+    if (type === "radio") {
+      // For radio inputs, update the formData directly
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else if (
+      name === "booking_codes.sporty_bet" ||
+      name === "booking_codes.onexbet"
+    ) {
+      // If it's a booking code, don't update the formData directly
+      setFormData((prev) => ({
+        ...prev,
+        booking_codes: {
+          ...prev.booking_codes,
+          [name.split(".").pop()]: value,
+        },
+      }));
+    } else {
+      // For other fields, update the formData directly
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    console.log(formData);
+  };
 
   // const handleOddsOnchange = (e: any) => {
-    
+
   // };
 
   // adds a new record field
@@ -168,7 +160,7 @@ const handleOnchange = (e:any) => {
   // submit all data
   const submitData = (e: any) => {
     e.preventDefault();
-    const { slip_title, type, status,booking_codes } = formData;
+    const { slip_title, type, status, booking_codes } = formData;
 
     const data = {
       slip_title,
@@ -224,7 +216,7 @@ const handleOnchange = (e:any) => {
               </div>
             </label>
             {
-              records.map((_odd:any,index:any) => {
+              records.map((_odd: any, index: any) => {
                 return (
                   <>
                     <div className="w-full flex flex-wrap gap-2 items-center">
@@ -248,7 +240,7 @@ const handleOnchange = (e:any) => {
                         className="p-2 ring-1 ring-gray-900/5 bg-slate-50 shadow-sm"
                         onChange={handleOnchange}
                       />
-                      {(
+                      {
                         <>
                           <DropdownMenu.Root>
                             <DropdownMenu.Trigger>
@@ -279,7 +271,7 @@ const handleOnchange = (e:any) => {
                             </DropdownMenu.Content>
                           </DropdownMenu.Root>
                         </>
-                      )}
+                      }
                     </div>
                   </>
                 );

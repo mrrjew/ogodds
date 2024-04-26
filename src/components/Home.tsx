@@ -54,7 +54,7 @@ const Slips = [
   ...(Array.isArray(freeSlips) ? freeSlips : []),
 ];
 
-
+console.log(pastSlip,slips)
 
   return (
     <>
@@ -99,7 +99,7 @@ const Slips = [
                       color="cyan"
                       className={`${homeStyles.textSize}`}
                     >
-                      <Link to="#">
+                      <Link to="https://t.me/OGODDS080">
                         <Avatar
                           src={telegram}
                           fallback="TG"
@@ -127,7 +127,7 @@ const Slips = [
                 POPULAR
               </span>{" "}
               <span
-                className={`font-bold text-white ${homeStyles.headingSize}`}
+                className={`font-bold text-gray-900/20 ${homeStyles.headingSize}`}
               >
                 LEAGUES
               </span>
@@ -170,8 +170,14 @@ const Slips = [
               <div className={`mt-5 h-full`}>
                 {/*container for the table */}
                 <div className="flex flex-col">
-                  <button onClick={() => window.location.reload()} className="text-gray-900/70 font-bold"><ReloadIcon /></button>
-                  {data._id && Slips ? (
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="text-gray-900/70 font-bold animate animate-pulse"
+                  >
+                    <ReloadIcon className="w-4 h-auto " />
+                  </button>
+                  {/* displaying slips even there is as atleast the pastslip or all the slips */}
+                  {pastSlip._id || slips[0]._id ? (
                     Slips.map((slip?, index?) => {
                       return (
                         <>
@@ -240,30 +246,52 @@ const Slips = [
                               </Table.Root>
 
                               {/* booking codes */}
-                              <div className="flex sm:flex-row flex-col items-center gap-1 justify-around p-2">
-                                <div className="flex gap-2 items-center">
-                                  <p className="text-red-600 text-lg font-bold">
-                                    SportyBet
-                                  </p>
-                                  <p className="bg-white rounded-md p-1 px-2 font-bold border-[1px] border-slate-300">
-                                    {slip?.booking_codes?.sporty_bet}
-                                  </p>
+                              {!data ? (
+                                <div className="w-full text-center py-2 bg-200 hover:bg-cyan-500 hover:text-white rounded-b-lg">
+                                  <Link
+                                    to={"/signin"}
+                                    className="font-medium text-base capitalize"
+                                  >
+                                    Sign in for more free bets
+                                    codes
+                                  </Link>
                                 </div>
-                                <div className="flex gap-2 items-center">
-                                  <p className="text-blue-600 text-lg font-bold">
-                                    1XBet
-                                  </p>
-                                  <p className="bg-white rounded-md p-1 px-2 font-bold border-[1px] border-slate-300">
-                                    {slip?.booking_codes?.onexbet}
-                                  </p>
+                              ) : (data && !data.vip) ? (
+                                <div className="w-full text-center py-2 bg-200 hover:bg-cyan-500 hover:text-white rounded-b-lg">
+                                  <Link
+                                    to={"/vip"}
+                                    className="font-medium text-base capitalize"
+                                  >
+                                    Become a vip to get booking codes
+                                  </Link>
                                 </div>
-                              </div>
+                              ) :
+                              (
+                                <div className="flex sm:flex-row flex-col items-center gap-1 justify-around p-2">
+                                  <div className="flex gap-2 items-center">
+                                    <p className="text-red-600 text-lg font-bold">
+                                      SportyBet
+                                    </p>
+                                    <p className="bg-white rounded-md p-1 px-2 font-bold border-[1px] border-slate-300">
+                                      {slip?.booking_codes?.sporty_bet}
+                                    </p>
+                                  </div>
+                                  <div className="flex gap-2 items-center">
+                                    <p className="text-blue-600 text-lg font-bold">
+                                      1XBet
+                                    </p>
+                                    <p className="bg-white rounded-md p-1 px-2 font-bold border-[1px] border-slate-300">
+                                      {slip?.booking_codes?.onexbet}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </>
                       );
                     })
-                  ) : loading ? (
+                  ) : loading && data._id ? (
                     <p className="text-xl font-medium text-center text-red-500">
                       Loading...
                     </p>
@@ -297,7 +325,7 @@ const Slips = [
                     <div
                       className={`${homeStyles.rawFlex} gap-5 flex flex-col  justify-center items-center`}
                     >
-                      <p className={`max-w-[30ch] text-start`}>
+                      <p className={`max-w-[30ch] text-center`}>
                         Are you ready to make money with our
                         <span className={`text-red-500`}> authentic </span>
                         odds? If you already have an account
@@ -309,7 +337,7 @@ const Slips = [
                       </div>
                     </div>
                     <div
-                      className={`flex flex-col gap-5 justify-center items-center`}
+                      className={`flex flex-col gap-5 text-center justify-center items-center`}
                     >
                       If you are a new user and don't have an account, create
                       one

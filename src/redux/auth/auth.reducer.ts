@@ -72,9 +72,9 @@ export const CreateSession = createAsyncThunk(
 );
 
 // user
-export const GetUser = createAsyncThunk(
+export const GetUser:any = createAsyncThunk(
   'user',
-  async (token: string, thunkAPI) => {
+  async (token: any, thunkAPI) => {
     try {
       const _token = token.replace(/^"(.*)"$/,`$1`)
       const response = await axios({
