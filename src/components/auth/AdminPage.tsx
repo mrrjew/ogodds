@@ -6,13 +6,14 @@ import React, { useEffect } from "react";
 import wonbet from "../../assets/wonbet.jpg";
 import whatiscashout from "../../assets/whatiscashout.png";
 import pending from "../../assets/pending.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux"
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { DeleteSlip, GetAllSlips } from "../../redux/slip/slip.reducer";
+import { DeleteSlip, DeleteSlips, GetAllSlips} from "../../redux/slip/slip.reducer";
 import { PaymentsSum } from "../../redux/payment/payment.reducer";
 import { GetUsers } from "../../redux/auth/auth.reducer";
+import { ArrowLeftEndOnRectangleIcon, DocumentChartBarIcon } from "@heroicons/react/24/outline";
 
 const AdminPage: React.FC = () => {
   const { data: user }: any = useSelector((state: RootState) => state.auth);
@@ -34,30 +35,35 @@ const AdminPage: React.FC = () => {
     dispatch(GetAllSlips(token)); // gets all slips
   }, [dispatch, success]);
 
-  const navigate = useNavigate();
-  (user.admin == false || !user._id) ? navigate("/") : null; // block non admin users from here
-
 
   const vip_users =
     users && users.filter((user: any) => user.vip == true)?.length;
   const casual_users =
     users && users.filter((user: any) => user.vip != true)?.length;
 
-  const deleteSlip = async (_id: any) => {
     const token = localStorage.getItem("token");
+  const deleteSlip = async (_id: any) => {
     const confirm = window.confirm("Do you want to delete this slip?");
     const data = { token, _id };
     confirm && await dispatch(DeleteSlip(data));
     confirm && await dispatch(GetAllSlips(token)); // gets all slips
   };
+
+  const deleteAllSlips = async () => {
+    const confirm = window.confirm("Do you want to delete all slips?");
+    confirm && (await dispatch(DeleteSlips(token)));
+    confirm && (await dispatch(GetAllSlips(token))); // gets all slips
+  }
   return (
     <>
+    {user && user.admin ? (
       <div className={`max-w-7xl mx-auto w-full`}>
+              <Link to="/" className="mx-4 mt-6 text-gray-900/70 font-normal flex items-center hover:underline"><ArrowLeftEndOnRectangleIcon className="w-6 h-4"/> Back Home</Link>
         {/* amount gained and current users */}
-        <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 w-full gap-2 sm:gap-8 p-4 justify-around">
-          <div className="w-full space-y-4 flex justify-between bg-yellow-500/85 items-center gap-4  rounded-2xl ring-1 ring-gray-900/5 shadow-lg p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 w-full gap-2 sm:gap-8 p-4 justify-around">
+          <div className="w-full space-y-4 flex justify-between bg-yellow-100/85 items-center gap-4  rounded-2xl ring-1 ring-gray-900/5 shadow-md p-4">
             <div className="space-y-4">
-              <p className="text-2xl sm:text-3xl text-white font-bold">
+              <p className="text-xl sm:text-2xl text-yellow-800/90 font-bold">
                 GHS{" "}
                 {sum_loading ? (
                   <p className="animate animate-pulse">Loading...</p>
@@ -65,24 +71,24 @@ const AdminPage: React.FC = () => {
                   sum / 100
                 ) : null}
               </p>
-              <h2 className="text-xl leading-7 tracking-tight text-gray-100/80">
+              <h2 className="text-xl leading-7 tracking-tight text-yellow-700/80">
                 Amount gained
               </h2>
             </div>
 
-            <BarChartIcon className="w-28 h-28 text-gray-900/10" />
+            <BarChartIcon className="w-28 h-28 text-yellow-200/10" />
           </div>
 
-          <div className="w-full space-y-4 flex justify-between bg-cyan-500/85 items-center gap-4 rounded-2xl ring-1 ring-gray-900/5 shadow-lg p-4">
+          <div className="w-full space-y-4 flex justify-between bg-cyan-100/85 items-center gap-4 rounded-2xl ring-1 ring-gray-900/5 shadow-md p-4">
             <div className="space-y-4">
-              <p className="text-2xl sm:text-3xl text-white font-bold">
+              <p className="text-2xl sm:text-3xl text-cyan-800/80 font-bold">
                 {users_loading ? (
                   <p className="animate animate-pulse">Loading...</p>
                 ) : users && vip_users ? (
                   vip_users
-                ) : null}
+                ) : 0}
               </p>
-              <h2 className="text-xl leading-7 tracking-tight text-gray-100/80">
+              <h2 className="text-xl leading-7 tracking-tight text-cyan-700/80">
                 Vip user<span>{vip_users && vip_users == 1 ? "" : "s"}</span>
               </h2>
             </div>
@@ -90,22 +96,40 @@ const AdminPage: React.FC = () => {
             <UserGroupIcon className="w-28 h-28 text-gray-900/10" />
           </div>
 
-          <div className="w-full space-y-4 flex justify-between bg-red-700/80 items-center gap-4 rounded-2xl ring-1 ring-gray-900/5 shadow-lg p-4">
+          <div className="w-full space-y-4 flex justify-between bg-red-100/80 items-center gap-4 rounded-2xl ring-1 ring-gray-900/5 shadow-md p-4">
             <div className="space-y-4">
-              <p className="text-2xl sm:text-3xl text-white font-bold">
+              <p className="text-2xl sm:text-3xl text-red-800/80 font-bold">
                 {users_loading ? (
                   <p className="animate animate-pulse">Loading...</p>
                 ) : users && casual_users ? (
                   casual_users
-                ) : null}
+                ) : 0}
               </p>
-              <h2 className="text-xl leading-7 tracking-tight text-gray-100/80">
+              <h2 className="text-xl leading-7 tracking-tight text-red-700/80">
                 Casual user
                 <span>{casual_users && casual_users == 1 ? "" : "s"}</span>
               </h2>
             </div>
 
-            <UserGroupIcon className="w-28 h-28 text-gray-900/10" />
+            <UserGroupIcon className="w-28 h-28 text-red-900/10" />
+          </div>
+
+          <div className="w-full space-y-4 flex justify-between bg-green-100/80 items-center gap-4 rounded-2xl ring-1 ring-gray-900/5 shadow-md p-4">
+            <div className="space-y-4">
+              <p className="text-2xl sm:text-3xl text-green-800/80 font-bold">
+                {loading ? (
+                  <p className="animate animate-pulse">Loading...</p>
+                ) : allSlips ? (
+                  allSlips?.length
+                ) : 0}
+              </p>
+              <h2 className="text-xl leading-7 tracking-tight text-green-700/80">
+                Slip
+                <span>{allSlips && allSlips?.length == 1 ? "" : "s"}</span>
+              </h2>
+            </div>
+
+            <DocumentChartBarIcon className="w-28 h-28 text-gray-900/10" />
           </div>
         </div>
 
@@ -114,25 +138,33 @@ const AdminPage: React.FC = () => {
         <div className="">
           <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-2 mb-4sm:-mb-8 mt-8">
             <h2 className="text-center sm:m-10 text-small sm:text-2xl font-bold text-gray-700/80">
-              RECENT BETTING SLIPS
+              All Betting Slips
             </h2>
 
             <Link
-              to="/adminEdit"
-              className="flex items-center gap-2 mx-8 p-2 rounded-2xl bg-indigo-500 text-white text-small font-semibold px-4"
+              to="#"
+              onClick={() => window.location.href = "/adminCreate"}
+              className="flex items-center gap-2 mx-8 p-2 rounded-2xl bg-purple-100 text-purple-900/70 text-small font-semibold px-4"
             >
               Create Slip <PlusIcon className="w-4 h-auto" />{" "}
             </Link>
+
           </div>
           {/*container for the table */}
-          <div className="flex flex-col m-2 sm:m-0">
+          <div className="flex flex-col gap-8 m-2 sm:m-4">
             <button
               onClick={() => window.location.reload()}
               className="text-gray-900/70 font-bold"
             >
               <ReloadIcon />
             </button>
-
+            <Link
+              to="#"
+              onClick={deleteAllSlips}
+              className={`${allSlips?.length == 0 ? "pointer-events-none opacity-[0.2]" : ""} flex items-center gap-2 mx-8 p-2 w-max rounded-2xl bg-red-100 text-red-900/70 text-small font-semibold px-4`}
+            >
+              Delete all <TrashIcon className="w-4 h-auto" />{" "}
+            </Link>
             {success ? (
               allSlips?.map((slip: any) => {
                 return (
@@ -140,7 +172,7 @@ const AdminPage: React.FC = () => {
                     <div className={`mt-5 h-full`}>
                       <div className="w-full bg-slate-50 shadow-md rounded-md mb-8">
                         <div className={`flex`}>
-                          <p className="w-full rounded-t-md  flex flex-wrap justify-between items-center bg-slate100 text-gray-800/80 p-2 text:lg sm:text-xl font-semibold">
+                          <p className="w-full rounded-t-md  flex flex-wrap justify-between items-center bg-slate-200 text-gray-800/80 p-2 text:lg sm:text-xl font-semibold">
                             {slip.slip_title}
 
                             <span className="flex items-center gap-2">
@@ -249,7 +281,7 @@ const AdminPage: React.FC = () => {
               <p className="animate animate-pulse text-lg text-red-500/80 font-medium text-center m-20">
                 Error loading slips. Refresh page
               </p>
-            ) : !allSlips ? (
+            ) : allSlips?.length == 0 ? (
               <p className="animate animate-pulse text-lg text-red-500/80 font-medium text-center m-20">
                 NO SLIPS YET
               </p>
@@ -257,6 +289,7 @@ const AdminPage: React.FC = () => {
           </div>
         </div>
       </div>
+      ) : <p>You are not authorized to this page</p>}
     </>
   );
 };

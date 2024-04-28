@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CreateSlip, DeleteSlip, GetAllGroupedSlips,GetAllSlips, LatestSlip, UpdateSlip } from "./slip.reducer";
+import { CreateSlip, DeleteSlip, DeleteSlips, GetAllGroupedSlips,GetAllSlips, LatestSlip, UpdateSlip } from "./slip.reducer";
 
 const initialState = {
   loading: false,
@@ -18,9 +18,6 @@ const slipSlice = createSlice({
       state.loading = false;
       state.error = false;
       state.success = false;
-      state.latestSlip = {};
-      state.allSlips = [{}], 
-      state.slips = [{}];
     },
   },
 
@@ -77,6 +74,19 @@ const slipSlice = createSlice({
         state.success = true;
       })
       .addCase(DeleteSlip.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+        state.success = false;
+      })
+      .addCase(DeleteSlips.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(DeleteSlips.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.success = true;
+      })
+      .addCase(DeleteSlips.rejected, (state) => {
         state.loading = false;
         state.error = true;
         state.success = false;

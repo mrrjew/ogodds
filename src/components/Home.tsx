@@ -54,14 +54,13 @@ const Slips = [
   ...(Array.isArray(freeSlips) ? freeSlips : []),
 ];
 
-console.log(pastSlip,slips)
 
   return (
     <>
       {/*home page section*/}
 
       <Theme>
-        <div className={`max-w-7xl mx-auto ${homeStyles.defaultBg}`}>
+        <div className={`max-w-7xl w-full mx-auto ${homeStyles.defaultBg}`}>
           {/*container for the upper content of the home page.*/}
           <div
             className={`flex flex-col bg-image relative h-[700px] w-full top-98px ${homeStyles.whiteText}`}
@@ -159,28 +158,38 @@ console.log(pastSlip,slips)
 
           <div>
             <p
-              className={`text-lg font-medium text-gray-600 mt-5 mb-4 justify-center flex`}
+              className={`text-lg font-medium text-gray-600 mt-5 mb-4 p-4 justify-center flex`}
             >
               FREE BETTING SLIPS (LIMITED)
             </p>
             <div
-              className={`flex flex-col sm:flex-row justify-center items-center p-2 pb-10 gap-10 align-middle`}
+              className={`flex flex-col sm:flex-row justify-center items-center p-4 pb-10 gap-10 align-middle`}
             >
               {/*container for the table in the bottom*/}
               <div className={`mt-5 h-full`}>
                 {/*container for the table */}
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
+                  {/* reload icon */}
                   <button
                     onClick={() => window.location.reload()}
                     className="text-gray-900/70 font-bold animate animate-pulse"
                   >
-                    <ReloadIcon className="w-4 h-auto " />
+                    <ReloadIcon className="w-4 h-auto ml-4" />
                   </button>
                   {/* displaying slips even there is as atleast the pastslip or all the slips */}
-                  {pastSlip._id || slips[0]._id ? (
-                    Slips.map((slip?, index?) => {
+                  {pastSlip?._id || slips[0]?._id ? (
+                    Slips.map((slip, index:number) => {
                       return (
                         <>
+                          {index == 0 ? (
+                            <p className="text-red-600/80 bg-red-100/50 px-2 mx-4 sm:mx-0 mt-2 rounded-lg w-max">
+                              Past {slip?.type?.toLowerCase()} slip
+                            </p>
+                          ) : (
+                            <p className="text-cyan-600 bg-cyan-100/50 px-2 mx-4 sm:mx-0 mt-1 rounded-lg w-max">
+                              Free slip
+                            </p>
+                          )}
                           <div key={index} className={`mt-5 w-full h-full`}>
                             <div className="w-full bg-slate-50 rounded-md mb-8 shadow-md">
                               <div className={`flex`}>
@@ -245,18 +254,16 @@ console.log(pastSlip,slips)
                                 )}
                               </Table.Root>
 
-                              {/* booking codes */}
                               {!data ? (
                                 <div className="w-full text-center py-2 bg-200 hover:bg-cyan-500 hover:text-white rounded-b-lg">
                                   <Link
                                     to={"/signin"}
                                     className="font-medium text-base capitalize"
                                   >
-                                    Sign in for more free bets
-                                    codes
+                                    Sign in for more free bets codes
                                   </Link>
                                 </div>
-                              ) : (data && !data.vip) ? (
+                              ) : data && !data.vip ? (
                                 <div className="w-full text-center py-2 bg-200 hover:bg-cyan-500 hover:text-white rounded-b-lg">
                                   <Link
                                     to={"/vip"}
@@ -265,8 +272,8 @@ console.log(pastSlip,slips)
                                     Become a vip to get booking codes
                                   </Link>
                                 </div>
-                              ) :
-                              (
+                              ) : index >= 1 ?
+                              ( 
                                 <div className="flex sm:flex-row flex-col items-center gap-1 justify-around p-2">
                                   <div className="flex gap-2 items-center">
                                     <p className="text-red-600 text-lg font-bold">
@@ -285,7 +292,7 @@ console.log(pastSlip,slips)
                                     </p>
                                   </div>
                                 </div>
-                              )}
+                              ):null}
                             </div>
                           </div>
                         </>

@@ -52,7 +52,7 @@ export default function Navbar() {
     },
   ];
   const userNavigation: { name: string; href: string }[] = [];
-  if (data && data?.isAdmin) {
+  if (data && data?.admin) {
     userNavigation.push({ name: "Admin dashboard", href: "/admin" });
   }
   userNavigation.push({ name: "Sign out", href: "/signin" });
@@ -62,7 +62,7 @@ export default function Navbar() {
   }
 
   return (
-    <Disclosure as="nav" className="bg-slate-100 p-1 font-rubik">
+    <Disclosure as="nav" className="bg-slate-100/80 p-1 font-rubik">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -101,8 +101,8 @@ export default function Navbar() {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? "bg-gray-200 text-white"
-                          : "text-gray-900/70 hover:bg-gray-200 hover:text-white",
+                          ? "bg-gray-200/40 text-gray"
+                          : "text-gray-900/70 hover:bg-gray-200/40 hover:text-gray-600",
                         "rounded-md px-3 py-2 text-sm font-medium"
                       )}
                       aria-current={item.current ? "page" : undefined}
@@ -161,13 +161,13 @@ export default function Navbar() {
                       <div className="flex gap-4 items-center">
                         <Link
                           to={"/signin"}
-                          className="rounded-md p-1 font-[500] text-white bg-gray-200 px-4"
+                          className="rounded-md p-1 font-[500] text-gray-900/70 bg-gray-200/50 px-4"
                         >
                           LOG IN
                         </Link>
                         <Link
                           to={"/register"}
-                          className="rounded-md p-1 font-[500] text-slate-50 bg-cyan-500 px-4"
+                          className="rounded-md p-1 font-[500] text-cyan-700 bg-cyan-100/70 px-4"
                         >
                           SIGN UP
                         </Link>
@@ -189,7 +189,7 @@ export default function Navbar() {
                   className={classNames(
                     item.current
                       ? "bg-gray-200 text-gray-900/70"
-                      : "text-gray-900/70 hover:bg-gray-200 hover:text-white",
+                      : "text-gray-900/70 hover:bg-gray-200 hover:text-gray-600",
                     "block rounded-md px-3 py-2 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}
@@ -236,13 +236,13 @@ export default function Navbar() {
                   <div className="flex gap-4 items-center">
                     <a
                       href={"/signin"}
-                      className="rounded-md p-1 font-[500] text-white bg-gray-200 px-4"
+                      className="rounded-md p-1 font-[500] text-gray-800/70 bg-gray-200 px-4"
                     >
                       LOG IN
                     </a>
                     <a
                       href={"/register"}
-                      className="rounded-md p-1 font-[500] text-slate-50 bg-cyan-500 px-4"
+                      className="rounded-md p-1 font-[500] text-cyan-600 bg-cyan-100 px-4"
                     >
                       SIGN UP
                     </a>

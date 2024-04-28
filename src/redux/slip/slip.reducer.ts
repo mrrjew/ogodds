@@ -84,23 +84,46 @@ export const DeleteSlip:any = createAsyncThunk("delete/slip", async (data:any,th
         return thunkAPI.rejectWithValue({error:e})
     }
 })
+
+export const DeleteSlips:any = createAsyncThunk("delete/slips", async (token:any,thunkAPI) => {
+    try{
+        const _token = token?.replace(/^"(.*)"$/, "$1")
+        const _url = `${url}/slip/delete`
+        const res = await axios(
+            {
+                method:"delete",
+                url:_url,
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization: `Bearer ${_token}`
+                }
+            }
+        )
+        
+        console.log(res.data)
+    return res.data
+    }catch(e){
+        console.log(e)
+        return thunkAPI.rejectWithValue({error:e})
+    }
+})
+
 export const CreateSlip:any = createAsyncThunk("create/slip", async (data:any,thunkAPI) => {
     try{
         const {token,slip} = data
-        const _token = token?.replace(/^"(.*)"$/, "$1")
-        const res = await axios(
-        {
-            method:"post",
-            url:`${url}/slip/create`,
-            headers:{
-                "Content-Type":"application/json",
-                Authorization: `Bearer ${_token}`
-            },data:{
-                slip
-            }
-        }
-    )
+        console.log(JSON.stringify(slip));
+        const _token = token?.replace(/^"(.*)"$/, "$1");
+        const res = await axios({
+          method: "post",
+          url: `${url}/slip/create`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${_token}`,
+          },
+          data: slip,
+        });
 
+        console.log(res.data);
     return res.data
     }catch(e){
         console.log(e)
@@ -114,11 +137,11 @@ export const UpdateSlip:any = createAsyncThunk("update/slip", async (data:any,th
         const res = await axios(
         {
             method:"put",
-            url:`${url}/slip/update/${_id}`,
+            url:`${url}/slip/edit/${_id}`,
             headers:{
                 "Content-Type":"application/json",
                 Authorization: `Bearer ${_token}`
-            },data:{slip}
+            },data:slip
         }
     )
 

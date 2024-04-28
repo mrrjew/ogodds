@@ -68,7 +68,7 @@ const App: React.FC = () => {
           draggable
           pauseOnHover
           theme="light"
-        />v
+        />
     </React.StrictMode>
   );
 };

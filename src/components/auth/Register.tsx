@@ -8,6 +8,7 @@ import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { generate } from "shortid";
 
 export default function Register() {
   // clear token before 
@@ -15,16 +16,17 @@ export default function Register() {
 
 const navigate = useNavigate();
 
-const toastOptions:any = {
-  position: "top-right",
-  autoClose: 3000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-};
+  const toastOptions: any = {
+    position: "top-right",
+    toastId: generate(),
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
 
 const [formData, setFormData] = useState({
   username: "",

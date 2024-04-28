@@ -7,6 +7,7 @@ import { reset } from "../../redux/auth/auth.slice";
 import { toast } from "react-toastify";
 import { CreateSession, GetUser, LoginUser } from "../../redux/auth/auth.reducer";
 import { useNavigate } from "react-router-dom";
+import { generate } from "shortid";
 
 
 export default function Login() {
@@ -14,6 +15,7 @@ const navigate = useNavigate();
 
   const toastOptions: any = {
     position: "top-right",
+    toastId:generate(),
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,

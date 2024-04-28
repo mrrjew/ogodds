@@ -52,7 +52,7 @@ const Premium: React.FC = () => {
   return (
     <>
       <div className={`max-w-7xl mx-auto `}>
-        {isVip ? (
+        {success && isVip ? (
           <>
             <Vip />
           </>
@@ -63,7 +63,7 @@ const Premium: React.FC = () => {
               {/*money bag image and amount text*/}
               <div className="flex flex-col w-full sm:w-1/3 justify-center items-center p-4 border-[0.1px] border-cyan-400/10 rounded-lg shadow-md">
                 <div className="items-center flex flex-col gap-2">
-                  <p className="w-full bg-gray-400 text-white p-2 rounded-lg text-white font-semibold mb-4">
+                  <p className="w-full bg-gray-100 text-gray-800/80 p-2 rounded-lg font-semibold mb-4">
                     DAILY VIP SUBSCRIPTION
                   </p>
                   <img
@@ -82,7 +82,7 @@ const Premium: React.FC = () => {
                 </p>
                 <button
                   onClick={registerVip}
-                  className={`bg-cyan-500 animate p-2 rounded-lg text-white font-medium${
+                  className={`bg-cyan-100 text-sm animate p-2 rounded-lg text-cyan-700 font-[500] hover:bg-cyan-200${
                     loading ? "animate-pulse" : ""
                   }`}
                 >

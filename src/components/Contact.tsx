@@ -12,10 +12,12 @@ import { SendSMS } from "../redux/mail.slice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { generate } from "shortid";
 
 export default function Contact() {
   const toastOptions: any = {
     position: "top-right",
+    toastId:generate(),
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,

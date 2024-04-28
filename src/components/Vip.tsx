@@ -12,11 +12,13 @@ import { GetAllGroupedSlips } from "../redux/slip/slip.reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { generate } from "shortid";
 
 export default function Vip() {
 
   const toastOptions: any = {
     position: "top-right",
+    toastId:generate(),
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
